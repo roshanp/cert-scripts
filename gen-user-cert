@@ -17,14 +17,14 @@ init() {
 
 gen-p12() {
     #From CA.pl
-    #Generate request file and private key
+    echo "Generate request file and private key"
     openssl req -config ${WORKING_CONF} -new -keyout ${KEY_DIR}/user.key -out ${REQ_DIR}/user.req -days 3650 -passout "pass:${DEFAULT_PASS}"
 
-    #Sign request and generate certificate
+    echo "Sign request and generate certificate"
     openssl ca -config ${WORKING_CONF} -policy policy_anything -passin "pass:${DEFAULT_PASS}" -batch -out ${TMP_DIR}/user.crt -infiles ${REQ_DIR}/user.req
 
-    #Convert certificate to pksc12
-    openssl pkcs12 -in ${TMP_DIR}/user.crt -inkey ${KEY_DIR}/user.key -certfile ${CA_DIR}/${CA_NAME}.crt -out ${CERT_DIR}/user.p12 -export -name "${USER_NAME}" -passin "pass:${DEFAULT_PASS}" -password "pass:"
+    echo "Convert certificate to pksc12"
+    openssl pkcs12 -in ${TMP_DIR}/user.crt -inkey ${KEY_DIR}/user.key -certfile ${CA_DIR}/${CA_NAME}.crt -out ${CERT_DIR}/user.p12 -export -name "${USER_NAME}" -passin "pass:${DEFAULT_PASS}" -password "pass:${DEFAULT_PASS}"
 }
 
 usage() {
@@ -40,7 +40,7 @@ usage() {
     exit 0
 }
 
-while getopts "u:e:hTn:" flag; do
+while getopts "u:e:p:hTn:" flag; do
     case $flag in
         u)
             USER_NAME=$OPTARG
@@ -59,6 +59,7 @@ done
 #Default values
 USER_NAME=${USER_NAME:-user}
 USER_EMAIL=${USER_EMAIL:-$(escapeName "${USER_NAME}")@devcert.com}
+#PASSWORD=${PASSWORD:-password}
 ACTION=${ACTION:-p12}
 
 ### MAIN ###

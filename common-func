@@ -6,7 +6,7 @@ CA_DIR=${CERT_ROOT_DIR}/CA_certs
 
 #Default password
 #must be longer than 4 characters
-DEFAULT_PASS=pass 
+DEFAULT_PASS=password 
 
 #Conf Location
 CONF_FILE=${CERT_ROOT_DIR}/conf/openssl.cnf
